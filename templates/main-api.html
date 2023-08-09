@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% block title %} Planets {% endblock %}
+
+{% block content %}
+    <div id="planetNameContainer" class="planet-name-container"></div>
+    {% for planet in planetsdata %}
+    <div class='planet' data-name="{{ planet[1] }}" data-size="{{ planet[2] }}" data-position="{{ planet[3] }}"
+        data-rotation-speed="{{ planet[4] }}" data-orbit-speed="{{ planet[5] }}" data-moons="{{ planet[6] }}"
+        {% if planet[7] %}data-inner-radius="{{ planet[7] }}" {% endif %}
+        {% if planet[8] %}data-outer-radius="{{ planet[8] }}" {% endif %}
+        onclick="sendDataToAPI(this)"
+    ></div>
+    {% endfor %}
+
+    {% for moon in moonsdata %}
+    <div class='moon' data-name="{{ moon[1] }}" data-extends-planet="{{ moon[2] }}" data-size="{{ moon[3] }}"
+        data-position="{{ moon[4] }}" data-rotation-speed="{{ moon[5] }}" data-orbit-speed="{{ moon[6] }}"
+        data-id-planet="{{ moon[7] }}"
+        onclick="sendDataToAPI(this)"
+    ></div>
+    {% endfor %}
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/threex.domevents@1.0.1/threex.domevents.js"></script>
+    <script type="module" src="{{ url_for('static', filename='js/main-api.js') }}"></script>
+
+    <button id="stopButton" class="stop-button">Stop Animation</button>
+
+ 
+    <style>
+            
+        .stop-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: rgba(255, 255, 255, 0.5);
+            border: none;
+            padding: 8px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+  
+        .planet {
+            position: relative;
+        }
+
+        .planet-name-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .planet-name {
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+            text-align: center;
+            white-space: nowrap;
+            pointer-events: none;
+        }
+    </style>
+{% endblock %}
