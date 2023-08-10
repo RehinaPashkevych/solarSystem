@@ -2,25 +2,25 @@ import * as THREE from "https://cdn.skypack.dev/three@0.132.2";
 import { OrbitControls } from "https://cdn.skypack.dev/three@0.132.2/examples/jsm/controls/OrbitControls.js";
 
 const objectsTexture = [
-  { name: "Stars", texture: "static/assets/stars.jpg",},
-  { name: "Moon", texture: "static/assets/moon.jpg",},
-  { name: "Sun", texture: "static/assets/sun.jpg" },
-  { name: "Mercury", texture: "static/assets/mercury.jpg" },
-  { name: "Venus", texture: "static/assets/venus.jpg" },
-  { name: "Earth", texture: "static/assets/earth.jpg" },
-  { name: "Mars", texture: "static/assets/mars.jpg" },
-  { name: "Jupiter", texture: "static/assets/jupiter.jpg" },
+  { name: "Stars", texture: "static/assets/objects/stars.jpg",},
+  { name: "Moon", texture: "static/assets/moons/earth/moon.jpg",},
+  { name: "Sun", texture: "static/assets/objects/sun.jpg" },
+  { name: "Mercury", texture: "static/assets/objects/mercury.jpg" },
+  { name: "Venus", texture: "static/assets/objects/venus.jpg" },
+  { name: "Earth", texture: "static/assets/objects/earth.jpg" },
+  { name: "Mars", texture: "static/assets/objects/mars.jpg" },
+  { name: "Jupiter", texture: "static/assets/objects/jupiter.jpg" },
   {
     name: "Saturn",
-    texture: "static/assets/saturn.jpg",
-    ringTexture: "static/assets/saturn_ring.png"
+    texture: "static/assets/objects/saturn.jpg",
+    ringTexture: "static/assets/objects/saturn_ring.png"
   },
   {
     name: "Uranus",
-    texture: "static/assets/uranus.jpg",
-    ringTexture: "static/assets/uranus_ring.png"
+    texture: "static/assets/objects/uranus.jpg",
+    ringTexture: "static/assets/objects/uranus_ring.png"
   },
-  { name: "Neptune", texture: "static/assets/neptune.jpg" }
+  { name: "Neptune", texture: "static/assets/objects/neptune.jpg" }
 ];
 
 //initializations
@@ -73,9 +73,6 @@ window.addEventListener('DOMContentLoaded', () => {
     planetsData.push(planetData);
   });
 
-  console.log(planetsData[1].name);
-
-
 const moonsDataElements = document.querySelectorAll('.moon');
 
 moonsDataElements.forEach(moonDataElement => {
@@ -92,16 +89,12 @@ moonsDataElements.forEach(moonDataElement => {
   moonsData.push(moonData);
 });
 
-console.log(moonsData[0].name);
-
-
 
 //=======CREATING SOLAR SYSTEM ==========================================================================
 function createPlanet(planetData) {
   const { size, position, innerRadius, outerRadius, name } = planetData;
   const geo = new THREE.SphereGeometry(parseFloat(size), 30, 30);
   let mat;
-  console.log("Creating" + name);
 
   const planetTextureData = objectsTexture.find((textureData) => textureData.name === name);
   if (!planetTextureData) {
@@ -144,6 +137,33 @@ function createPlanet(planetData) {
   obj.add(mesh);
   scene.add(obj);
   mesh.position.x = parseFloat(position);
+
+  // Create an empty BufferGeometry
+  const orbitPathGeometry = new THREE.BufferGeometry();
+  // Calculate number of segments for the orbit path
+  const segments =720;
+  // Create arrays to hold the positions of the orbit path points
+  const positions = new Float32Array(segments * 3);
+  // Fill the positions array with points along a circle
+  for (let i = 0; i < segments; i++) {
+    const angle = (i / segments) * Math.PI * 2;
+    const x = planetData.position * Math.cos(angle);
+    const z = planetData.position * Math.sin(angle);
+  
+    positions[i * 3] = x;
+    positions[i * 3 + 1] = 0; // Y position
+    positions[i * 3 + 2] = z;
+  }
+  // Set the positions as an attribute of the geometry
+  orbitPathGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+  // Create a LineSegments object for the orbit path
+  const orbitPathMaterial = new THREE.LineBasicMaterial({ color: 0x00ffff, transparent: true, opacity: 0.4});
+  const orbitPath = new THREE.LineSegments(orbitPathGeometry, orbitPathMaterial);
+  
+  // Add the orbit path to the scene
+  scene.add(orbitPath);
+
+  planetData.orbitPath = orbitPath;
 
   planetData.mesh = mesh;
   planetData.obj = obj;
@@ -206,7 +226,7 @@ async function createMoon(moonData, planets) {
 createSolarSystem();
 
 
-function createSolarSystem() {
+async function createSolarSystem() {
   for (const planetName in planetsData) {
     const planetData = planetsData[planetName];
     const planet = createPlanet(planetData);
@@ -215,7 +235,7 @@ function createSolarSystem() {
   }
 
   for (const moonData of moonsData) {
-    const moon = createMoon(moonData, planets);
+    const moon = await createMoon(moonData, planets);
     moon.name = moonData.name;
     moons.push(moon);
   }
@@ -239,12 +259,13 @@ function animate() {
     for (const moonData of moonsData) {
       if (moonData.mesh) {
         moonData.mesh.rotateY(moonData.rotationSpeed);
-        const planet = planets.find((data) => data.obj.name === moonData.extendsPlanet);
+        const planet = planetsData.find((data) => data.obj.name === moonData.extendsPlanet);
         if (planet) {
           moonData.obj.rotateY(moonData.orbitSpeed);
         }
       }
     }
+  
   }
 
   renderer.render(scene, camera);
@@ -292,12 +313,15 @@ function onMouseClick(event) {
       break;
     } else {
       const moon = moons.find((data) => data.mesh === intersectedObject);
+      console.log(moons);
       if (moon) {
         clickedObject = moon;
         break;
       }
     }
   }
+
+
 
   if (clickedObject) {
     console.log("Clicked on an object:", clickedObject.name);
@@ -311,6 +335,29 @@ function onMouseClick(event) {
 
 
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+
+
+
+
 
 
 
@@ -358,308 +405,5 @@ function sendDataToAPI(object) {
     console.error('Error:', error);
   });
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-const planetsTexture = [
-  { name: "Sun", texture: "static/assets/sun.jpg" },
-  { name: "Mercury", texture: "static/assets/mercury.jpg" },
-  { name: "Venus", texture: "static/assets/venus.jpg" },
-  { name: "Earth", texture: "static/assets/earth.jpg" },
-  { name: "Mars", texture: "static/assets/mars.jpg" },
-  { name: "Jupiter", texture: "static/assets/jupiter.jpg" },
-  {
-    name: "Saturn",
-    texture: "static/assets/saturn.jpg",
-    ringTexture: "static/assets/saturn_ring.png"
-  },
-  {
-    name: "Uranus",
-    texture: "static/assets/uranus.jpg",
-    ringTexture: "static/assets/uranus_ring.png"
-  },
-  { name: "Neptune", texture: "static/assets/neptune.jpg" }
-];
-
-const otherSpaceData = [
-  { name: "Stars", texture: "static/assets/stars.jpg" }, //0
-]
-
-const textureLoader = new THREE.TextureLoader();
-
-// Initialize Three.js scene, camera, and renderer
-const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
-camera.position.set(-90, 140, 140);
-const renderer = new THREE.WebGLRenderer();
-renderer.setSize(window.innerWidth, window.innerHeight);
-document.body.appendChild(renderer.domElement);
-const orbit = new OrbitControls(camera, renderer.domElement);
-orbit.update();
-
-// Add ambient and point lights
-const ambientLight = new THREE.AmbientLight(0x333333);
-scene.add(ambientLight);
-
-// Create and position the point light
-const pointLight = new THREE.PointLight(0xffffff, 2, 300);
-pointLight.position.set(0, 0, 0); // Position the light at the center of the scene
-scene.add(pointLight);
-
-
-// Load space texture
-const cubeTextureLoader = new THREE.CubeTextureLoader();
-const spaceTexture = otherSpaceData[0].texture;
-scene.background = cubeTextureLoader.load(Array(6).fill(spaceTexture));
-
-// Create texture dictionary
-const textureDictionary = {};
-
-// Load planet textures
-planetsTexture.forEach((planetTexture) => {
-  const planetTextureEntry = {
-    texture: textureLoader.load(planetTexture.texture),
-    ringTexture: planetTexture.ringTexture ? textureLoader.load(planetTexture.ringTexture) : undefined,
-  };
-
-  textureDictionary[planetTexture.name] = planetTextureEntry;
-});
-
-
-
-// Function to create planets
-function createPlanet(planetData) {
-  const { name, size, position, rotationSpeed, orbitSpeed, innerRadius, outerRadius } = planetData;
-  const geometry = new THREE.SphereGeometry(size, 32, 32);
-
-  const planetTextureEntry = textureDictionary[name];
-  if (!planetTextureEntry) return; // Return if texture entry is not found
-
-  let planetMaterial ;
-
-  if (name === "Sun") {
-    planetMaterial = new THREE.MeshBasicMaterial({
-      map : planetTextureEntry.texture,
-    })
-  }
-  else{
-    planetMaterial = new THREE.MeshStandardMaterial({ map: planetTextureEntry.texture });
-  }
-
-  const planet = new THREE.Mesh(geometry, planetMaterial);
-  const obj = new THREE.Object3D();
-
-
-  if (innerRadius && outerRadius && planetTextureEntry.ringTexture) {
-    const ringTexture = planetTextureEntry.ringTexture;
-    const ringGeometry = new THREE.RingGeometry(innerRadius, outerRadius, 32);
-    const ringMaterial = new THREE.MeshStandardMaterial({ map: ringTexture, side: THREE.DoubleSide });
-    const ring = new THREE.Mesh(ringGeometry, ringMaterial);
-    
-    // Position the ring relative to the planet's position
-    ring.position.set(position, 0, 0);
-    ring.rotation.x = -Math.PI / 2;
-
-    obj.add(ring);
-  }
-  
-  planet.position.set(position, 0, 0);
-  planet.rotationSpeed = rotationSpeed;
-  planet.orbitSpeed = orbitSpeed;
-  obj.add(planet);
-  scene.add(planet);
-
-  // Create an empty BufferGeometry
-  const orbitPathGeometry = new THREE.BufferGeometry();
-  // Calculate number of segments for the orbit path
-  const segments =720;
-  // Create arrays to hold the positions of the orbit path points
-  const positions = new Float32Array(segments * 3);
-  // Fill the positions array with points along a circle
-  for (let i = 0; i < segments; i++) {
-    const angle = (i / segments) * Math.PI * 2;
-    const x = planetData.position * Math.cos(angle);
-    const z = planetData.position * Math.sin(angle);
-  
-    positions[i * 3] = x;
-    positions[i * 3 + 1] = 0; // Y position
-    positions[i * 3 + 2] = z;
-  }
-  // Set the positions as an attribute of the geometry
-  orbitPathGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-  // Create a LineSegments object for the orbit path
-  const orbitPathMaterial = new THREE.LineBasicMaterial({ color: 0x00ffff, transparent: true, opacity: 0.4});
-  const orbitPath = new THREE.LineSegments(orbitPathGeometry, orbitPathMaterial);
-  
-  // Add the orbit path to the scene
-  scene.add(orbitPath);
-
-  planetData.orbitPath = orbitPath;
-
-}
-
-// Animate the scene
-function animate() {
-  requestAnimationFrame(animate);
-  scene.traverse((object) => {
-    if (object instanceof THREE.Mesh) {
-      object.rotation.y += object.rotationSpeed;
-      const angle = object.orbitSpeed;
-      const cosAngle = Math.cos(angle);
-      const sinAngle = Math.sin(angle);
-      const newX = object.position.x * cosAngle - object.position.z * sinAngle;
-      const newZ = object.position.x * sinAngle + object.position.z * cosAngle;
-      object.position.set(newX, 0, newZ);
-
-      // Update orbit path
-      if (object.orbitPath) {
-        const orbitPathGeometry = object.orbitPath.geometry;
-        const positions = orbitPathGeometry.attributes.position.array;
-        for (let i = 0; i < positions.length; i += 3) {
-          const angle = (i / positions.length) * Math.PI * 2;
-          const x = object.position.x * Math.cos(angle);
-          const z = object.position.x * Math.sin(angle);
-          
-          positions[i] = x;
-          positions[i + 2] = z;
-        }
-        orbitPathGeometry.attributes.position.needsUpdate = true;
-      }
-    }
-  });
-  renderer.render(scene, camera);
-}let planetDataArray = []; // Array to store planet data
-
-// Initialize planets and start animation
-window.addEventListener('DOMContentLoaded', () => {
-  const planetsDataElements = document.querySelectorAll('.planet');
-  planetsDataElements.forEach((planetDataElement) => {
-    const planetData = {
-      name: planetDataElement.dataset.name,
-      size: parseFloat(planetDataElement.dataset.size),
-      position: parseFloat(planetDataElement.dataset.position),
-      rotationSpeed: parseFloat(planetDataElement.dataset.rotationSpeed),
-      orbitSpeed: parseFloat(planetDataElement.dataset.orbitSpeed),
-      moons: parseInt(planetDataElement.dataset.moons),
-      innerRadius: planetDataElement.dataset.innerRadius ? parseFloat(planetDataElement.dataset.innerRadius) : null,
-      outerRadius: planetDataElement.dataset.outerRadius ? parseFloat(planetDataElement.dataset.outerRadius) : null,
-    };
-    planetDataArray.push(planetData); // Add planet data to the array
-    createPlanet(planetData);
-  });
-  animate();
-});
-
-// Handle window resize
-window.addEventListener("resize", function () {
-  camera.aspect = window.innerWidth / window.innerHeight;
-  camera.updateProjectionMatrix();
-  renderer.setSize(window.innerWidth, window.innerHeight);
-});
-
-
-
-//ETYKIETA------------------------------------------------------------------------------
-
-// Create a DOM element to hold the planet name
-const planetNameContainer = document.getElementById('planetNameContainer');
-
-function showPlanetName(planetDataElement) {
-  const planetName = planetDataElement.dataset.name;
-  planetNameContainer.textContent = planetName;
-  planetNameContainer.style.display = 'block';
-  planetNameContainer.style.top = `${event.clientY - 40}px`; // Adjust the position if needed
-  planetNameContainer.style.left = `${event.clientX}px`;
-}
-
-// Event listener for the mousemove event
-renderer.domElement.addEventListener('mousemove', onMouseMove, false);
-
-function onMouseMove(event) {
- // Calculate the mouse position relative to the canvas
- const mouse = new THREE.Vector2();
- mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
- mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-
- // Set up the raycaster from the camera to the mouse position
- const raycaster = new THREE.Raycaster();
- raycaster.setFromCamera(mouse, camera);
-
- // Get the list of objects that intersect with the raycaster
- const intersects = raycaster.intersectObjects(scene.children, true);
-
- // Check if any planet is one of the intersected objects
- let hoveredPlanet;
-
-  for (const intersect of intersects) {
-    const planet = planetDataArray.find((data) => data.mesh === intersect.object);
-    if (planet) {
-      hoveredPlanet = planet;
-      break;
-    }
-  }
-  console.log("Intersected objects:", hoveredPlanet);
-  if (hoveredPlanet) {
-    // Show the planet name above the hovered planet
-    planetNameContainer.textContent = hoveredPlanet.name;
-    planetNameContainer.style.display = 'block';
-    planetNameContainer.style.top = `${event.clientY - 40}px`; // Adjust the position if needed
-    planetNameContainer.style.left = `${event.clientX}px`;
-  } else {
-    // Hide the planet name if no planet is hovered
-    planetNameContainer.style.display = 'none';
-  }
-}
-
 
 */

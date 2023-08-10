@@ -56,7 +56,15 @@ def planet():
 
 @app.route("/redirectAPI")
 def objectApi():
-     return render_template('object-api.html')
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute('SELECT * FROM planetsData;')
+    planetsdata = cur.fetchall()
+    cur.execute('SELECT * FROM moonsData;')
+    moonsdata = cur.fetchall()
+    cur.close()
+    conn.close()
+    return render_template('object-api.html', planetsdata=planetsdata, moonsdata=moonsdata)
 
 
 """

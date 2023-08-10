@@ -55,7 +55,6 @@ body {
     border-radius: 5px;
     color: white;
     overflow-y: auto; /* Add scrollbars if content exceeds the container height */
-    display: none; /* Hide the planet info container initially */
   }
   
   /* Show the planet info container when it has content */
