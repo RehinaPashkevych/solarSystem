@@ -71,12 +71,9 @@ function initializePlanetsAndMoons() {
       rotationSpeed: parseFloat(planetDataElement.dataset.rotationSpeed),
       orbitSpeed: parseFloat(planetDataElement.dataset.orbitSpeed),
       moons: parseInt(planetDataElement.dataset.moons),
-      innerRadius: planetDataElement.dataset.innerRadius
-        ? parseFloat(planetDataElement.dataset.innerRadius)
-        : null,
-      outerRadius: planetDataElement.dataset.outerRadius
-        ? parseFloat(planetDataElement.dataset.outerRadius)
-        : null
+      description: planetDataElement.dataset.description,
+      history: planetDataElement.dataset.history
+
     };
     planetsData.push(planetData);
   });
@@ -159,10 +156,10 @@ function createPlanet(planetData) {
 
   // Create and rotate moons around this planet
   moonsForPlanet.forEach(moonData => {
-    const moon = createMoon(moonData); // Pass planetsData here
-    moon.name = moonData.name;
-    moon.obj.rotateY(moonData.orbitSpeed); // Rotate moon around planet
-    moonData.obj = moon.obj; // Store moon object reference
+ //   const moon = createMoon(moonData); // Pass planetsData here
+ //   moon.name = moonData.name;
+ //   moon.obj.rotateY(moonData.orbitSpeed); // Rotate moon around planet
+ //   moonData.obj = moon.obj; // Store moon object reference
   });
 
 
@@ -312,8 +309,8 @@ function createPlanetInfoElement(planetData) {
   const propertiesElement = document.createElement('div');
   propertiesElement.classList.add('planet-properties');
   propertiesElement.innerHTML = `
-      <strong>Diameter:</strong> ${planetData.diameter} km<br>
-      <strong>Distance from Sun:</strong> ${planetData.distanceFromSun} million km<br>
+      <strong>Diameter:</strong> ${planetData.size} km<br>
+      <strong>Distance from Sun:</strong> ${planetData.position} million km<br>
       <strong>Rotation Speed:</strong> ${planetData.rotationSpeed} days<br>
       <strong>Orbit Speed:</strong> ${planetData.orbitSpeed} km/s<br>
       <strong>Moons:</strong> ${planetData.moons}<br>
@@ -332,8 +329,9 @@ document.addEventListener('DOMContentLoaded', () => {
   initializePlanetsAndMoons();
   animate();
 
+  const backButton = document.getElementById("backButton");
   // Handle clicks on planets/moons
-  window.addEventListener('click', event => {
+  backButton.addEventListener('click', event => {
     // Navigate back to the previous page using the browser's history
     location.replace(`/api`);
   });

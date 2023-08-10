@@ -2,48 +2,47 @@ import * as THREE from "https://cdn.skypack.dev/three@0.132.2";
 import { OrbitControls } from "https://cdn.skypack.dev/three@0.132.2/examples/jsm/controls/OrbitControls.js";
 
 const planetsData = [
-  { name: "Sun", texture: "static/assets/sun.jpg", size: 15, position: 0, rotationSpeed: 0.004, orbitSpeed: 0, moons: 0 },
-  { name: "Mercury", texture: "static/assets/mercury.jpg", size: 3.2, position: 28, rotationSpeed: 0.004, orbitSpeed: 0.04, moons: 0 },
-  { name: "Venus", texture: "static/assets/venus.jpg", size: 5.8, position: 44, rotationSpeed: 0.002, orbitSpeed: 0.015, moons: 0 },
-  { name: "Earth", texture: "static/assets/earth.jpg", size: 6, position: 62, rotationSpeed: 0.02, orbitSpeed: 0.01, moons: 1 },
-  { name: "Mars", texture: "static/assets/mars.jpg", size: 4, position: 78, rotationSpeed: 0.018, orbitSpeed: 0.008, moons: 0 },
-  { name: "Jupiter", texture: "static/assets/jupiter.jpg", size: 12, position: 100, rotationSpeed: 0.04, orbitSpeed: 0.002, moons: 0 },
+  { name: "Sun", texture: "static/assets/objects/sun.jpg", size: 15, position: 0, rotationSpeed: 0.004, orbitSpeed: 0, moons: 0 },
+  { name: "Mercury", texture: "static/assets/objects/mercury.jpg", size: 3.2, position: 28, rotationSpeed: 0.004, orbitSpeed: 0.04, moons: 0 },
+  { name: "Venus", texture: "static/assets/objects/venus.jpg", size: 5.8, position: 44, rotationSpeed: 0.002, orbitSpeed: 0.015, moons: 0 },
+  { name: "Earth", texture: "static/assets/objects/earth.jpg", size: 6, position: 62, rotationSpeed: 0.02, orbitSpeed: 0.01, moons: 1 },
+  { name: "Mars", texture: "static/assets/objects/mars.jpg", size: 4, position: 78, rotationSpeed: 0.018, orbitSpeed: 0.008, moons: 2 },
+  { name: "Jupiter", texture: "static/assets/objects/jupiter.jpg", size: 12, position: 100, rotationSpeed: 0.04, orbitSpeed: 0.002, moons: 79 },
   {
     name: "Saturn",
-    texture: "static/assets/saturn.jpg",
-    ringTexture: "static/assets/saturn_ring.png",
+    texture: "static/assets/objects/saturn.jpg",
+    ringTexture: "static/assets/objects/saturn_ring.png",
     size: 10,
     position: 138,
     rotationSpeed: 0.038,
     orbitSpeed: 0.0009,
     innerRadius: 10,
     outerRadius: 20,
-     moons: 0
+    moons: 83
   },
   {
     name: "Uranus",
-    texture: "static/assets/uranus.jpg",
-    ringTexture: "static/assets/uranus_ring.png",
+    texture: "static/assets/objects/uranus.jpg",
+    ringTexture: "static/assets/objects/uranus_ring.png",
     size: 7,
     position: 176,
     rotationSpeed: 0.032,
     orbitSpeed: 0.0004,
     innerRadius: 7,
     outerRadius: 12,
-    moons: 0
+    moons: 27
   },
-  { name: "Neptune", texture: "static/assets/neptune.jpg", size: 7, position: 200, rotationSpeed: 0.032, orbitSpeed: 0.0001, moons: 0 },
- 
+  { name: "Neptune", texture: "static/assets/objects/neptune.jpg", size: 7, position: 200, rotationSpeed: 0.032, orbitSpeed: 0.0001, moons: 14 }
 ];
 
 
 const moonsData = [
-  { name: "Moon", extendsPlanet: "Earth", texture: "static/assets/moon.jpg", size: 1.5, position: 68, rotationSpeed: 0.038, orbitSpeed: 0.01 },  
+  { name: "Moon", extendsPlanet: "Earth", texture: "static/assets/moons/earth/moon.jpg", size: 1.5, position: 68, rotationSpeed: 0.038, orbitSpeed: 0.01 },  
 ]
 
 
 const otherSpaceData = [
-  { name: "Stars", texture: "static/assets/stars.jpg", size: "", position: ""  }, //0
+  { name: "Stars", texture: "static/assets/objects/stars.jpg", size: "", position: ""  }, //0
 ]
 
 

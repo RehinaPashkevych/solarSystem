@@ -45,7 +45,7 @@ def object():
 def planet():
     conn = get_db_connection()
     cur = conn.cursor()
-    cur.execute('SELECT * FROM planetsData;')
+    cur.execute('SELECT name, size, position, rotation_speed, orbit_speed, num_moons, inner_radius, outer_radius FROM planetsdata;')
     planetsdata = cur.fetchall()
     cur.execute('SELECT * FROM moonsData;')
     moonsdata = cur.fetchall()
@@ -58,7 +58,7 @@ def planet():
 def objectApi():
     conn = get_db_connection()
     cur = conn.cursor()
-    cur.execute('SELECT * FROM planetsData;')
+    cur.execute(' SELECT name, num_moons, description, history, size_original, position_original, rotation_speed_original, orbit_speed_original FROM planetsdata;')
     planetsdata = cur.fetchall()
     cur.execute('SELECT * FROM moonsData;')
     moonsdata = cur.fetchall()

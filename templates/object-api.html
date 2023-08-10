@@ -14,10 +14,9 @@
 
   <div id="planetNameContainer" class="planet-name-container"></div>
   {% for planet in planetsdata %}
-  <div class='planet' data-name="{{ planet[1] }}" data-size="{{ planet[2] }}" data-position="{{ planet[3] }}"
-      data-rotation-speed="{{ planet[4] }}" data-orbit-speed="{{ planet[5] }}" data-moons="{{ planet[6] }}"
-      {% if planet[7] %}data-inner-radius="{{ planet[7] }}" {% endif %}
-      {% if planet[8] %}data-outer-radius="{{ planet[8] }}" {% endif %}
+  <div class='planet' data-name="{{ planet[0] }}" data-size="{{ planet[4] }}" data-position="{{ planet[5] }}"
+      data-rotation-speed="{{ planet[6] }}" data-orbit-speed="{{ planet[7] }}" data-moons="{{ planet[1] }}"
+      data-description="{{ planet[2] }}" data-history="{{ planet[3] }}" 
       onclick="sendDataToAPI(this)"
   ></div>
   {% endfor %}
