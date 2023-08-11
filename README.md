@@ -1,6 +1,6 @@
 # Solar System Information Project
 
-This project comprises two main code files: `main.js` and `object.js`, representing prototypes without database integration. On the other hand, `main-api.js`, `object-api.js` is already connected to a database. To initiate the project, start by running `flaskMain.py`. 
+This project comprises two main code files: `main.js` and `object.js`, representing prototypes without database integration and moons. On the other hand, `main-api.js`, `object-api.js` is already connected to a database. To initiate the project, start by running `flaskMain.py`. 
 
 ## URLs and Routes
 
