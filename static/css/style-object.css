@@ -15,49 +15,41 @@ body {
 
 /*TEXT-planet description properties*/
 
-.planet-info {
-    margin-bottom: 20px;
-}
-
-.planet-name {
+.name, .planet-name {
     font-size: 24px;
     font-weight: bold;
     margin-bottom: 15px;
+    color: #fff;
 }
 
-.planet-description {
+.description, .planet-description {
     font-size: 18px;
     margin-bottom: 10px;
 }
 
-.planet-properties {
-    font-size: 16px;
+.properties, .planet-properties {
+    font-size: 18px;
 }
 
-.main-screen {
-    position: relative;
-    display: flex;
-    height: 100%; /* Adjust the height as needed */
-  }
-  
-  /* CSS for the canvas element */
-  #planetCanvas {
-    flex: 1; /* Occupy available space in the main screen */
-  }
+.note {
+  margin-top: 40px;
+  font-size: 20px;
+  color: #80f373;
+}
   
   /* CSS for the planetInfoContainer */
   #planetInfoContainer {
     position: absolute;
-    top: 100px;
+    top: 200px;
     right: 60px;
     width: 500px;
     padding: 10px;
     border-radius: 5px;
     color: white;
-    overflow-y: auto; /* Add scrollbars if content exceeds the container height */
+   
   }
-  
-  /* Show the planet info container when it has content */
-  #planetInfoContainer.show {
-    display: block;
+
+  .property{
+    font-size: 16px;
+
   }

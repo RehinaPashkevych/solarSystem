@@ -1,1 +1,1 @@
-extends_planet
+print(object_name)

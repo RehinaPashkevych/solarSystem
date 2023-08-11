@@ -47,7 +47,7 @@ def planet():
     cur = conn.cursor()
     cur.execute('SELECT name, size, position, rotation_speed, orbit_speed, num_moons, inner_radius, outer_radius FROM planetsdata;')
     planetsdata = cur.fetchall()
-    cur.execute('SELECT * FROM moonsData;')
+    cur.execute("SELECT * FROM moonsData WHERE name = 'Moon';")
     moonsdata = cur.fetchall()
     cur.close()
     conn.close()
@@ -56,31 +56,20 @@ def planet():
 
 @app.route("/redirectAPI")
 def objectApi():
+    object_name = request.args.get('object')
+    print(object_name)
+    if not object_name:
+        return "No object name provided."
     conn = get_db_connection()
     cur = conn.cursor()
-    cur.execute(' SELECT name, num_moons, description, history, size_original, position_original, rotation_speed_original, orbit_speed_original FROM planetsdata;')
+    cur.execute(' SELECT name, num_moons, description, history, size_original, position_original, rotation_speed_original, orbit_speed_original FROM planetsdata WHERE name = %s;', (object_name,))
     planetsdata = cur.fetchall()
-    cur.execute('SELECT * FROM moonsData;')
+    cur.execute('SELECT * FROM moonsData WHERE extendsplanet = %s OR name = %s;', (object_name, "Moon"))
     moonsdata = cur.fetchall()
     cur.close()
     conn.close()
     return render_template('object-api.html', planetsdata=planetsdata, moonsdata=moonsdata)
 
-
-"""
-def object_api():
-    if request.method == 'POST':
-        data = request.get_json()
-        # Process the received data as needed
-
-        # Return a JSON response
-        response_data = {'message': 'Data received and processed successfully'}
-        return jsonify(response_data)
-    
-    # If the request method is not POST, return an error response
-    return jsonify({'error': 'Invalid request method'})
-
-"""
 
 if __name__ == '__main__':
     app.run(debug=True)

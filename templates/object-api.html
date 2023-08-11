@@ -24,7 +24,9 @@
   {% for moon in moonsdata %}
   <div class='moon' data-name="{{ moon[1] }}" data-extends-planet="{{ moon[2] }}" data-size="{{ moon[3] }}"
       data-position="{{ moon[4] }}" data-rotation-speed="{{ moon[5] }}" data-orbit-speed="{{ moon[6] }}"
-      data-id-planet="{{ moon[7] }}"
+      data-id-planet="{{ moon[7] }}" data-size-original="{{ moon[8] }}" data-position-original="{{ moon[9] }}" 
+      data-rotation-original="{{ moon[10] }}" data-orbit-original="{{ moon[11] }}" data-description="{{moon[12]}}"
+      data-history="{{ moon[13] }}"
       onclick="sendDataToAPI(this)"
   ></div>
   {% endfor %}

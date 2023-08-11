@@ -174,8 +174,8 @@ function createPlanet(planetData) {
 
 // -------------------------------------------------------
 async function createMoon(moonData, planets) {
-  const { name, size, position, extendsPlanet } = moonData;
-  
+  const { name,  position, extendsPlanet } = moonData;
+  const size = 1.5;
   // Find the planet the Moon extends from
   const planet = planets.find((data) => data.obj.name === extendsPlanet);
 
@@ -208,12 +208,14 @@ async function createMoon(moonData, planets) {
   obj.add(mesh);
 
   // Set the position of the Moon relative to the planet
-  obj.position.set(parseFloat(position), 10, 0);
+  obj.position.set(planet.mesh.position.x, 0, 0);
   planet.obj.add(obj); // Add the Moon to the planet
 
   // Store the Moon data in the planet object for future reference if needed
   planet.moons = planet.moons || [];
   planet.moons.push({ name, obj: obj });
+
+  mesh.position.x =  position ;
 
   moonData.mesh = mesh;
   moonData.obj = obj;
@@ -222,9 +224,7 @@ async function createMoon(moonData, planets) {
   return { mesh: mesh, obj: obj };
 }
 
-
 createSolarSystem();
-
 
 async function createSolarSystem() {
   for (const planetName in planetsData) {
@@ -256,7 +256,8 @@ function animate() {
       }
     }
 
-    for (const moonData of moonsData) {
+   // for (const moonData of moonsData) {
+    const moonData = moonsData[0];
       if (moonData.mesh) {
         moonData.mesh.rotateY(moonData.rotationSpeed);
         const planet = planetsData.find((data) => data.obj.name === moonData.extendsPlanet);
@@ -264,7 +265,7 @@ function animate() {
           moonData.obj.rotateY(moonData.orbitSpeed);
         }
       }
-    }
+  //  }
   
   }
 
@@ -333,77 +334,6 @@ function onMouseClick(event) {
 }
 
 
-
 });
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-
-
-
-
-
-
-
-function sendDataToAPI(object) {
-  const type = object.dataset.type;
-  const name = object.dataset.name;
-  const size = object.dataset.size;
-  const position = object.dataset.position;
-  const rotationSpeed = object.dataset.rotationSpeed;
-  const orbitSpeed = object.dataset.orbitSpeed;
-  const moons = object.dataset.moons;
-  const innerRadius = object.dataset.innerRadius;
-  const outerRadius = object.dataset.outerRadius;
-  const extendsPlanet = object.dataset.extendsPlanet;
-  const idPlanet = object.dataset.idPlanet;
-
-  const data = {
-    type: type,
-    name: name,
-    size: size,
-    position: position,
-    rotationSpeed: rotationSpeed,
-    orbitSpeed: orbitSpeed,
-    moons: moons,
-    innerRadius: innerRadius,
-    outerRadius: outerRadius,
-    extendsPlanet: extendsPlanet,
-    idPlanet: idPlanet
-  };
-
-  // Send POST request to object-api.js or your Flask API
-  // Adjust the URL based on your configuration
-  fetch('/redirectAPI', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(data),
-  })
-  .then(response => response.json())
-  .then(result => {
-    console.log(result); // Handle API response as needed
-  })
-  .catch(error => {
-    console.error('Error:', error);
-  });
-}
-
-*/
