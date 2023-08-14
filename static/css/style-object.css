@@ -3,13 +3,16 @@ body {
  }
 
 .back-button {
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 16px;
+    color: white;
     position: absolute;
     top: 10px;
     right: 10px;
     background-color: rgba(255, 255, 255, 0.5);
     border: none;
-    padding: 8px;
-    border-radius: 5px;
     cursor: pointer;
 }
 

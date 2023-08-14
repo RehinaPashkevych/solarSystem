@@ -93,23 +93,27 @@ const objectsTexture = [
 function initializePlanetsAndMoons() {
   const planetsDataElements = document.querySelectorAll('.planet');
 
-  const planetDataElement = planetsDataElements[0]; // Assuming you have only one element
-  const planetData = {
-    name: planetDataElement.dataset.name,
-    sizeOriginal: parseFloat(planetDataElement.dataset.size),
-    positionOriginal: parseFloat(planetDataElement.dataset.position),
-    rotationSpeed: parseFloat(planetDataElement.dataset.rotationSpeed),
-    orbitSpeed: parseFloat(planetDataElement.dataset.orbitSpeed),
-    moons: parseInt(planetDataElement.dataset.moons),
-    description: planetDataElement.dataset.description,
-    history: planetDataElement.dataset.history
-  };
+  planetsDataElements.forEach(planetDataElement => {
+    const planetName = planetDataElement.dataset.name;
+    const planetData = {
+      name: planetName,
+      sizeOriginal: parseFloat(planetDataElement.dataset.size),
+      positionOriginal: parseFloat(planetDataElement.dataset.position),
+      rotationSpeed: parseFloat(planetDataElement.dataset.rotationSpeed),
+      orbitSpeed: parseFloat(planetDataElement.dataset.orbitSpeed),
+      moons: parseInt(planetDataElement.dataset.moons),
+      description: planetDataElement.dataset.description,
+      history: planetDataElement.dataset.history
 
+    };
+    
   if (planetData.name === "Jupiter" || planetData.name === "Saturn" || planetData.name === "Uranus" || planetData.name === "Neptune") {
     planetData.notes = "You see only the 5 largest moons for the planet.";
   }
+    planetsData.push(planetData);
+  });
+
   
-   planetsData = [planetData];
   
   const moonsDataElements = document.querySelectorAll('.moon');
   moonsDataElements.forEach(moonDataElement => {
@@ -308,9 +312,18 @@ function createPropertiesElement(data) {
 
   addProperty(propertiesElement, 'Diameter', data.sizeOriginal, 'km');
   addProperty(propertiesElement, 'Distance from Sun', data.positionOriginal, 'million km');
-  addProperty(propertiesElement, 'Rotation Speed', data.rotationSpeed, 'days');
-  addProperty(propertiesElement, 'Orbit Speed', data.orbitSpeed, 'km/s');
-  addProperty(propertiesElement, 'Moons', data.moons );
+  addProperty(propertiesElement, 'Rotation Speed', data.rotationSpeedOriginal, 'days');
+  addProperty(propertiesElement, 'Orbit Speed', data.orbitSpeedOriginal, 'km/s');
+  //if (data.moons  > 0) {
+    const moonsLink = document.createElement('a');
+    moonsLink.textContent = `Moons: ${data.moons}`;
+      // Apply lighter blue color to the link
+    moonsLink.style.color = "#7039e6";
+    moonsLink.addEventListener('click', event => {
+      location.replace(`/moons?planet=${clickedObjectName}`);
+    });
+    propertiesElement.appendChild(moonsLink);
+ // }
   addProperty(propertiesElement, 'History', data.history);
 
   return propertiesElement;

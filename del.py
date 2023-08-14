@@ -1,4 +1,7 @@
 from sqlalchemy import create_engine
+"""
+The function to check DB connection
+"""
 database_uri = 'postgresql://postgres:0000@localhost:5432/solarsystem '
 
 try:

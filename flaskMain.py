@@ -18,27 +18,7 @@ def get_db_connection():
         password='0000'
     )
     return conn
-
-"""class Planet(db.Model):
-    id_planet = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(32), nullable=False)
-    size = db.Column(db.SmallInteger, nullable=False)
-    position = db.Column(db.SmallInteger, nullable=False)
-    rotation_speed = db.Column(db.Numeric(5, 4), nullable=False)
-    orbit_speed = db.Column(db.Numeric(5, 4), nullable=False)
-    num_moons = db.Column(db.SmallInteger, nullable=False)
-    inner_radius = db.Column(db.SmallInteger)
-    outer_radius = db.Column(db.SmallInteger)
-"""
-
-@app.route("/")
-def index():
-    return render_template('index.html')
-
-
-@app.route("/redirect")
-def object():
-     return render_template('object.html')
+outer_radius = db.Column(db.SmallInteger)
 
 # Route to retrieve planet data in JSON format
 @app.route('/api')
@@ -70,6 +50,23 @@ def objectApi():
     conn.close()
     return render_template('object-api.html', planetsdata=planetsdata, moonsdata=moonsdata)
 
+
+
+@app.route("/moons")
+def moons():
+    planet_name = request.args.get('planet')
+    conn = get_db_connection()
+    cur = conn.cursor()
+    if planet_name:
+        cur.execute('SELECT name, extendsPlanet, sizeoriginal, positionoriginal, rotationspeedoriginal, orbitspeedoriginal, description, history  FROM moonsData WHERE extendsplanet = %s;', (planet_name,))
+    moonsdata = cur.fetchall()
+    if not moonsdata:
+        no_planets_message = "No moons were found for the specified planet."
+    else:
+        no_planets_message = None
+    cur.close()
+    conn.close()
+    return render_template('moons.html', moonsdata=moonsdata, planet_name=planet_name, no_planets_message=no_planets_message)
 
 if __name__ == '__main__':
     app.run(debug=True)
