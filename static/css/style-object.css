@@ -40,19 +40,19 @@ body {
   color: #80f373;
 }
   
-  /* CSS for the planetInfoContainer */
-  #planetInfoContainer {
-    position: absolute;
-    top: 200px;
-    right: 60px;
-    width: 500px;
-    padding: 10px;
-    border-radius: 5px;
-    color: white;
-   
-  }
+/* CSS for the planetInfoContainer */
+#planetInfoContainer {
+  position: absolute;
+  top: 200px;
+  right: 60px;
+  width: 500px;
+  padding: 10px;
+  border-radius: 5px;
+  color: white;
+  
+}
 
-  .property{
-    font-size: 16px;
+.property{
+  font-size: 16px;
 
-  }
+}

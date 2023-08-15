@@ -327,7 +327,7 @@ function onMouseClick(event) {
   if (clickedObject) {
     console.log("Clicked on an object:", clickedObject.name);
     // Redirect to the new site with the clicked object name as a URL parameter
-    location.replace(`/redirectAPI?object=${clickedObject.name}`);
+    location.replace(`/redirect?object=${clickedObject.name}`);
   } else {
     console.log("There is no such object.");
   }

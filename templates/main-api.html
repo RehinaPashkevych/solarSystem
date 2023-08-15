@@ -18,6 +18,7 @@
     ></div>
     {% endfor %}
 
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style-index.css') }}" type="text/css">
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/threex.domevents@1.0.1/threex.domevents.js"></script>
@@ -25,47 +26,4 @@
 
     <button id="stopButton" class="stop-button">Stop Animation</button>
 
-    <style>
-            
-        .stop-button {
-            color: white;
-            font-size: 16px;
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background-color: rgba(255, 255, 255, 0.5);
-            border: none;
-            padding: 8px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-  
-        .planet {
-            position: relative;
-        }
-
-        .planet-name {
-            position: absolute;
-            top: -30px;
-            left: 50%;
-            transform: translateX(-50%);
-            color: white;
-            font-size: 12px;
-            font-weight: bold;
-            text-align: center;
-            white-space: nowrap;
-            pointer-events: none;
-        }
-
-
-        body {
-            margin: 0;
-            overflow: hidden;
-        }
-
-        canvas {
-            display: block;
-        }
-
-    </style>
 {% endblock %}

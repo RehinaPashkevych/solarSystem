@@ -3,10 +3,11 @@
 
 {% block content %}
 
-<h1>Moons Data of the {{ planet_name }}</h1>
+<h1>- Moons Data of {{ planet_name }} -</h1>
 {% if no_planets_message %}
 <p>{{ no_planets_message }}</p>
 {% else %}
+<p>You see {{ moonsdata|length }} out of {{ num_moons }} moons of  {{ planet_name }} so far known. Information may be incorrect.</p> 
 <table>
     <thead>
         <tr>
@@ -37,63 +38,10 @@
 </table>
 {% endif %}
 <div class="buttons-container">
-    <a href="/redirectAPI?object={{ planet_name }} " id=backButton" class="button">Back</a>
+    <a href="/redirect?object={{ planet_name }} " id=backButton" class="button">Back</a>
     <a href="/api" class="button">Home</a>
 </div>
 
+<link rel="stylesheet" href="{{ url_for('static', filename='css/moons.css') }}" type="text/css">
 
-
-    <style>
-                body {
-            background-color: black;
-            color: white;
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-
-        h1 {
-            margin-bottom: 20px;
-        }
-
-        table {
-            border-collapse: collapse;
-            width: 100%;
-            margin-top: 20px;
-        }
-
-        th, td {
-            border: 1px solid white;
-            padding: 8px;
-            text-align: left;
-        }
-
-        th {
-            background-color: #2a2626;
-            color: white;
-        }
-
-        tr:nth-child(even) {
-            background-color: #555;
-        }
-
-        tr:nth-child(odd) {
-            background-color: #444;
-        }
-
-.buttons-container {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-}
-
-.button {
-    padding: 10px 20px;
-    background-color: rgba(255, 255, 255, 0.5);
-    color: white;
-    text-decoration: none;
-    border-radius: 4px;
-    margin-left: 10px; /* Add some spacing between buttons */
-}
-
-    </style>
 {% endblock %}

@@ -1,15 +1,10 @@
-from flask import Flask, render_template, jsonify, request
-from flask_sqlalchemy import SQLAlchemy
+from flask import Flask, render_template, request
 import psycopg2
 
-
 app = Flask(__name__, static_folder="static")
-
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:0000@localhost:5432/solarsystem '
-db = SQLAlchemy(app)
 
 def get_db_connection():
-    # Implement your database connection code here
     conn = psycopg2.connect(
         host='localhost',
         port='5432',
@@ -18,9 +13,7 @@ def get_db_connection():
         password='0000'
     )
     return conn
-outer_radius = db.Column(db.SmallInteger)
 
-# Route to retrieve planet data in JSON format
 @app.route('/api')
 def planet():
     conn = get_db_connection()
@@ -33,40 +26,46 @@ def planet():
     conn.close()
     return render_template('main-api.html', planetsdata=planetsdata, moonsdata=moonsdata)
 
-
-@app.route("/redirectAPI")
-def objectApi():
+@app.route("/redirect")
+def object_api():
     object_name = request.args.get('object')
-    print(object_name)
     if not object_name:
         return "No object name provided."
     conn = get_db_connection()
     cur = conn.cursor()
-    cur.execute(' SELECT name, num_moons, description, history, size_original, position_original, rotation_speed_original, orbit_speed_original FROM planetsdata WHERE name = %s;', (object_name,))
+    cur.execute('SELECT name, num_moons, description, history, size_original, position_original, rotation_speed_original, orbit_speed_original FROM planetsdata WHERE name = %s;', (object_name,))
     planetsdata = cur.fetchall()
-    cur.execute('SELECT * FROM moonsData WHERE extendsplanet = %s OR name = %s;', (object_name, "Moon"))
+    cur.execute('SELECT * FROM moonsData WHERE extendsplanet = %s OR name = %s LIMIT 6;', (object_name, "Moon"))
     moonsdata = cur.fetchall()
     cur.close()
     conn.close()
     return render_template('object-api.html', planetsdata=planetsdata, moonsdata=moonsdata)
-
-
 
 @app.route("/moons")
 def moons():
     planet_name = request.args.get('planet')
     conn = get_db_connection()
     cur = conn.cursor()
-    if planet_name:
-        cur.execute('SELECT name, extendsPlanet, sizeoriginal, positionoriginal, rotationspeedoriginal, orbitspeedoriginal, description, history  FROM moonsData WHERE extendsplanet = %s;', (planet_name,))
-    moonsdata = cur.fetchall()
-    if not moonsdata:
-        no_planets_message = "No moons were found for the specified planet."
+    cur.execute('SELECT num_moons FROM planetsData WHERE name = %s;', (planet_name,))
+    num_moons_tuple = cur.fetchone()
+    
+    if num_moons_tuple:
+        num_moons = num_moons_tuple[0]
     else:
-        no_planets_message = None
+        num_moons = 0
+    
+    if planet_name:
+        cur.execute('SELECT name, extendsPlanet, sizeoriginal, positionoriginal, rotationspeedoriginal, orbitspeedoriginal, description, history FROM moonsData WHERE extendsplanet = %s;', (planet_name,))
+    moonsdata = cur.fetchall()
+    
+    no_planets_message = None
+    if not moonsdata:
+        no_planets_message = f"No moons were found for the specified planet."
+    
     cur.close()
     conn.close()
-    return render_template('moons.html', moonsdata=moonsdata, planet_name=planet_name, no_planets_message=no_planets_message)
+    
+    return render_template('moons.html', moonsdata=moonsdata, planet_name=planet_name, no_planets_message=no_planets_message, num_moons=num_moons)
 
 if __name__ == '__main__':
     app.run(debug=True)

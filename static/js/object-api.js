@@ -74,6 +74,9 @@ const objectsTexture = [
 
   { name: "Nereida", texture: "static/assets/moons/neptune/nereida.jpg" }, //Neptune sattelite
   { name: "Triton", texture: "static/assets/moons/neptune/triton.jpg" },    //Neptune sattelite
+  { name: "Proteus", texture: "static/assets/moons/neptune/proteus.jpg"},   //Neptune sattelite
+  { name: "Larissa", texture: "static/assets/moons/neptune/larissa.jpg"},   //Neptune sattelite
+  { name: "Galatea", texture: "static/assets/moons/neptune/galatea.jpg"},   //Neptune sattelite
 
   { name: "Dione", texture: "static/assets/moons/saturn/dione.jpeg" }, //saturn sattelite
   { name: "Iapetus", texture: "static/assets/moons/saturn/iapetus.jpg" }, //saturn sattelite

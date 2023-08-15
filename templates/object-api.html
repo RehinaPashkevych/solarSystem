@@ -1,12 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title id="pageTitle">object</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/style-object.css') }}">
-</head>
-<body>
+{% extends 'base.html' %}
+{% block title %} Planets {% endblock %}
+
+{% block content %}
   <div class="main-screen">
     <canvas id="planetCanvas"></canvas>
     <div id="planetInfoContainer"></div>
@@ -14,28 +9,24 @@
 
   <div id="planetNameContainer" class="planet-name-container"></div>
   {% for planet in planetsdata %}
-  <div class='planet' data-name="{{ planet[0] }}" data-size="{{ planet[4] }}" data-position="{{ planet[5] }}"
-      data-rotation-speed="{{ planet[6] }}" data-orbit-speed="{{ planet[7] }}" data-moons="{{ planet[1] }}"
-      data-description="{{ planet[2] }}" data-history="{{ planet[3] }}" 
-      onclick="sendDataToAPI(this)"
-  ></div>
+    <div class='planet' data-name="{{ planet[0] }}" data-size="{{ planet[4] }}" data-position="{{ planet[5] }}"
+        data-rotation-speed="{{ planet[6] }}" data-orbit-speed="{{ planet[7] }}" data-moons="{{ planet[1] }}"
+        data-description="{{ planet[2] }}" data-history="{{ planet[3] }}" 
+    ></div>
   {% endfor %}
 
   {% for moon in moonsdata %}
-  <div class='moon' data-name="{{ moon[1] }}" data-extends-planet="{{ moon[2] }}" data-size="{{ moon[3] }}"
-      data-position="{{ moon[4] }}" data-rotation-speed="{{ moon[5] }}" data-orbit-speed="{{ moon[6] }}"
-      data-id-planet="{{ moon[7] }}" data-size-original="{{ moon[8] }}" data-position-original="{{ moon[9] }}" 
-      data-rotation-original="{{ moon[10] }}" data-orbit-original="{{ moon[11] }}" data-description="{{moon[12]}}"
-      data-history="{{ moon[13] }}"
-      onclick="sendDataToAPI(this)"
-  ></div>
+    <div class='moon' data-name="{{ moon[1] }}" data-extends-planet="{{ moon[2] }}" data-size="{{ moon[3] }}"
+        data-position="{{ moon[4] }}" data-rotation-speed="{{ moon[5] }}" data-orbit-speed="{{ moon[6] }}"
+        data-id-planet="{{ moon[7] }}" data-size-original="{{ moon[8] }}" data-position-original="{{ moon[9] }}" 
+        data-rotation-original="{{ moon[10] }}" data-orbit-original="{{ moon[11] }}" data-description="{{moon[12]}}"
+        data-history="{{ moon[13] }}"
+    ></div>
   {% endfor %}
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script type="module" src="{{ url_for('static', filename='js/object-api.js') }}"></script>
   <button id="backButton" class="back-button" type="button">Home</button>
 
- 
-
-</body>
-</html>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style-object.css') }}">
+{% endblock %}
