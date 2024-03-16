@@ -1,13 +1,37 @@
 import psycopg2
 from flask import jsonify
+import urllib.parse as urlparse
+import os
+
 
 # The file for creating DB with 2 tables (planetsData, moonsData)
 
-conn = psycopg2.connect(
-        host="localhost",
-        database="solarsystem",
-        user="postgres",
-        password="0000")
+database_url = os.environ.get('DATABASE_URL')
+    
+    # If DATABASE_URL is not set, fall back to the default local database connection
+if not database_url:
+        conn = psycopg2.connect(
+            host='localhost',
+            port='5432',
+            database='solarsystem',
+            user='postgres',
+            password='0000'
+        )
+        
+else:
+        # Parse the DATABASE_URL if it's set
+        urlparse.uses_netloc.append("postgres")
+        url = urlparse.urlparse(database_url)
+        
+        # Create a connection using the parsed DATABASE_URL
+        conn = psycopg2.connect(
+            database=url.path[1:],  # Remove the leading slash
+            user=url.username,
+            password=url.password,
+            host=url.hostname,
+            port=url.port
+        )
+        
 
 # Open a cursor to perform database operations
 cur = conn.cursor()

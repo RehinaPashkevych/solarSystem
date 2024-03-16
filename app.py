@@ -8,8 +8,6 @@ app = Flask(__name__, static_folder="static")
 
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'postgresql://postgres:0000@localhost:5432/solarsystem')
 
-print(os.environ.get('DATABASE_URL'))
-
 
 def get_db_connection():
     # Attempt to retrieve the DATABASE_URL environment variable
