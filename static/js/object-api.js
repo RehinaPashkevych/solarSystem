@@ -315,8 +315,8 @@ function createPropertiesElement(data) {
 
   addProperty(propertiesElement, 'Diameter', data.sizeOriginal, 'km');
   addProperty(propertiesElement, 'Distance from Sun', data.positionOriginal, 'million km');
-  addProperty(propertiesElement, 'Rotation Speed', data.rotationSpeedOriginal, 'days');
-  addProperty(propertiesElement, 'Orbit Speed', data.orbitSpeedOriginal, 'km/s');
+  addProperty(propertiesElement, 'Rotation Speed', data.rotationSpeed, 'days');
+  addProperty(propertiesElement, 'Orbit Speed', data.orbitSpeed, 'km/s');
   //if (data.moons  > 0) {
     const moonsLink = document.createElement('a');
     moonsLink.textContent = `Moons: ${data.moons}`;
