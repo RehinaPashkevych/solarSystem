@@ -6,9 +6,44 @@ import os
 app = Flask(__name__, static_folder="static")
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:0000@localhost:54321/solarsystem ' - locally
 
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'postgresql://postgres:0000@localhost:54321/solarsystem')
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'postgresql://postgres:0000@localhost:5432/solarsystem')
 
-"""def get_db_connection():
+print(os.environ.get('DATABASE_URL'))
+
+
+def get_db_connection():
+    # Attempt to retrieve the DATABASE_URL environment variable
+    database_url = os.environ.get('DATABASE_URL')
+    
+    # If DATABASE_URL is not set, fall back to the default local database connection
+    if not database_url:
+        conn = psycopg2.connect(
+            host='localhost',
+            port='5432',
+            database='solarsystem',
+            user='postgres',
+            password='0000'
+        )
+        return conn
+    else:
+        # Parse the DATABASE_URL if it's set
+        urlparse.uses_netloc.append("postgres")
+        url = urlparse.urlparse(database_url)
+        
+        # Create a connection using the parsed DATABASE_URL
+        conn = psycopg2.connect(
+            database=url.path[1:],  # Remove the leading slash
+            user=url.username,
+            password=url.password,
+            host=url.hostname,
+            port=url.port
+        )
+        return conn
+
+"""
+
+
+def get_db_connection():
     conn = psycopg2.connect(
         host='localhost',
         port='5432',
@@ -17,7 +52,10 @@ app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'postgres
         password='0000'
     )
     return conn
-"""
+
+
+
+
 
 def get_db_connection():
     urlparse.uses_netloc.append("postgres")
@@ -30,7 +68,13 @@ def get_db_connection():
         host=url.hostname,
         port=url.port
     )
-    return conn
+  return conn
+"""
+
+
+
+
+  
 
 @app.route('/api')
 def planet():
