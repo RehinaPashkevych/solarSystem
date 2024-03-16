@@ -1,16 +1,34 @@
 from flask import Flask, render_template, request
 import psycopg2
+import urllib.parse as urlparse
+import os
 
 app = Flask(__name__, static_folder="static")
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:0000@localhost:5432/solarsystem '
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:0000@localhost:54321/solarsystem ' - locally
 
-def get_db_connection():
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'postgresql://postgres:0000@localhost:54321/solarsystem')
+
+"""def get_db_connection():
     conn = psycopg2.connect(
         host='localhost',
         port='5432',
         database='solarsystem',
         user='postgres',
         password='0000'
+    )
+    return conn
+"""
+
+def get_db_connection():
+    urlparse.uses_netloc.append("postgres")
+    url = urlparse.urlparse(os.environ.get('DATABASE_URL'))
+
+    conn = psycopg2.connect(
+        database=url.path[1:],
+        user=url.username,
+        password=url.password,
+        host=url.hostname,
+        port=url.port
     )
     return conn
 
