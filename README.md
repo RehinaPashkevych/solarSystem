@@ -1,10 +1,10 @@
 # Solar System Information Project
 
-Welcome to the Solar System Information Project! This project aims to provide a fascinating journey through our celestial neighborhood, offering a detailed exploration of planets, the Sun, and even the Moons.
+Welcome to the Solar System Information Project! This project aims to provide a fascinating journey through our celestial neighborhood, offering a detailed exploration of planets, the Sun, and even the Moons. You can see the result here: https://solar-system-6dddde5ce1c0.herokuapp.com/api
 
 ## Getting Started
 
-To embark on this cosmic adventure, simply kickstart the project by running the `flaskMain.py` script.
+To embark on this cosmic adventure, simply kickstart the project by running the `app.py` script.
 
 ## URLs and Routes
 
