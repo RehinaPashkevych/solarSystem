@@ -3,7 +3,7 @@
 Welcome to the Solar System Information Project! This project aims to provide a fascinating journey through our celestial neighborhood, offering a detailed exploration of planets, the Sun, and even the Moons. You can see the result here: https://solar-system-6dddde5ce1c0.herokuapp.com/api
 
 <img src="images/Screenshot_128.png" alt="app img" width="500" height="300">
-<img src="images/Screenshot_128.png" alt="app img" width="500" height="300">
+<img src="images/Screenshot_129.png" alt="app img" width="500" height="300">
 <img src="images/Screenshot_130.png" alt="app img" width="500" height="300">
 
 
